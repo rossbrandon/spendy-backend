@@ -1,8 +1,19 @@
 import {NestFactory} from '@nestjs/core'
+import {ValidationPipe} from '@nestjs/common'
 import {AppModule} from './app.module'
+import * as dotenv from 'dotenv'
+
+dotenv.config()
 
 async function bootstrap() {
     const app = await NestFactory.create(AppModule)
-    await app.listen(3000)
+
+    app.enableCors()
+    app.useGlobalPipes(
+        new ValidationPipe({
+            disableErrorMessages: true,
+        }),
+    )
+    await app.listen(process.env.PORT)
 }
 bootstrap()
