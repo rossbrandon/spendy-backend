@@ -1,9 +1,14 @@
-import {Injectable} from '@nestjs/common'
-import {Item} from '../item'
-import {Items} from '../items'
+import {Inject, Injectable} from '@nestjs/common'
+import {REQUEST} from '@nestjs/core'
+import {Item} from './item'
+import {Items} from './items'
 
 @Injectable()
 export class ItemsService {
+    constructor(@Inject(REQUEST) private request: any) {}
+
+    private readonly audience: string = process.env.AUTH0_AUDIENCE
+
     private readonly items: Items = {
         1: {
             id: 1,
@@ -33,6 +38,8 @@ export class ItemsService {
     }
 
     create(newItem: Item): void {
+        const email = this.request.user[`${this.audience}/email`]
+        console.log(`Email: ${email}`)
         const id = new Date().valueOf()
         this.items[id] = {
             ...newItem,

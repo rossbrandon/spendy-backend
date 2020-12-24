@@ -9,11 +9,11 @@ import {
     UseGuards,
 } from '@nestjs/common'
 import {ItemsService} from './items.service'
-import {Items} from '../items'
-import {Item} from '../item'
+import {Items} from './items'
+import {Item} from './item'
 import {AuthGuard} from '@nestjs/passport'
-import {Permissions} from '../permissions.decorator'
-import {PermissionsGuard} from '../permissions.guard'
+import {Permissions} from '../authz/permissions.decorator'
+import {PermissionsGuard} from '../authz/permissions.guard'
 
 @Controller('items')
 export class ItemsController {
