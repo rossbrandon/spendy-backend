@@ -3,7 +3,7 @@ import {REQUEST} from '@nestjs/core'
 import {InjectModel} from '@nestjs/mongoose'
 import {Model} from 'mongoose'
 import {Expense, ExpenseDocument} from './expense.schema'
-import {CreateExpenseDto} from './create-expense.dto'
+import {ExpenseDto} from './expense.dto'
 
 @Injectable()
 export class ExpensesService {
@@ -13,38 +13,54 @@ export class ExpensesService {
         private readonly expenseModel: Model<ExpenseDocument>,
     ) {}
 
-    private readonly audience: string = process.env.AUTH0_AUDIENCE
+    // private readonly userEmail: string = this.request.user[
+    //     `${process.env.AUTH0_AUDIENCE}/email`
+    // ]
+    private readonly userEmail: string = 'rosstafarian1@gmail.com'
 
     async findAll(): Promise<Expense[]> {
-        const email = this.request.user[`${this.audience}/email`]
-        return this.expenseModel.find({user_email: email}).exec()
+        return this.expenseModel.find({userEmail: this.userEmail}).exec()
     }
 
-    async create(createExpenseDto: CreateExpenseDto): Promise<Expense> {
-        const createdExpense = new this.expenseModel(createExpenseDto)
-        return createdExpense.save()
+    async findByDateRange(startDate: Date, endDate: Date): Promise<Expense[]> {
+        return this.expenseModel.find({
+            userEmail: this.userEmail,
+            date: {
+                $gte: startDate,
+                $lte: endDate,
+            },
+        })
     }
 
     async find(id): Promise<Expense> {
-        const expense = await this.expenseModel.findById(id).exec()
-        return expense
+        return await this.expenseModel
+            .findOne({_id: id, userEmail: this.userEmail})
+            .exec()
     }
 
-    async update(id, createExpenseDto: CreateExpenseDto): Promise<Expense> {
-        const editedExpense = await this.expenseModel.findByIdAndUpdate(
-            id,
-            createExpenseDto,
+    async create(expenseDto: ExpenseDto): Promise<Expense> {
+        expenseDto.userEmail = this.userEmail
+        const createdExpense = new this.expenseModel(expenseDto)
+        return createdExpense.save()
+    }
+
+    async update(id, expenseDto: ExpenseDto): Promise<Expense> {
+        const editedExpense = await this.expenseModel.findOneAndUpdate(
+            {_id: id, userEmail: this.userEmail},
+            expenseDto,
             {new: true},
         )
         return editedExpense
     }
 
     async delete(id): Promise<Expense> {
-        const deletedExpense = await this.expenseModel.findByIdAndRemove(id)
-        return deletedExpense
+        return await this.expenseModel.findOneAndRemove({
+            _id: id,
+            userEmail: this.userEmail,
+        })
     }
 
-    async batchInsert(batchList: CreateExpenseDto[]): Promise<any> {
+    async batchInsert(batchList: ExpenseDto[]): Promise<any> {
         return await this.expenseModel
             .insertMany(batchList)
             .then(function (mongooseDocuments) {

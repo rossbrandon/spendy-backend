@@ -1,33 +1,43 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose'
 import {Document} from 'mongoose'
+import {ObjectType, Field} from '@nestjs/graphql'
 
 export type BudgetDocument = Budget & Document
 
-@Schema()
+@Schema({timestamps: true})
+@ObjectType()
 export class Budget {
+    @Field()
     @Prop()
     name: string
 
+    @Field()
     @Prop()
-    user_email: string
+    userEmail: string
 
+    @Field()
     @Prop()
     amount: number
 
+    @Field()
     @Prop()
-    start_date: string
+    startDate: Date
 
+    @Field({nullable: true})
     @Prop()
-    end_date: string
+    endDate: Date
 
+    @Field()
     @Prop()
-    show_in_menu: boolean
+    showInMenu: boolean
 
+    @Field()
     @Prop()
-    created_at: string
+    createdAt: Date
 
+    @Field()
     @Prop()
-    updated_at: string
+    updatedAt: Date
 }
 
 export const BudgetSchema = SchemaFactory.createForClass(Budget)

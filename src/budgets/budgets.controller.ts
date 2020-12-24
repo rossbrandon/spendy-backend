@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common'
 import {BudgetsService} from './budgets.service'
 import {Budget} from './budget.schema'
-import {CreateBudgetDto} from './create-budget.dto'
+import {BudgetDto} from './budget.dto'
 // import {AuthGuard} from '@nestjs/passport'
 // import {Permissions} from '../authz/permissions.decorator'
 // import {PermissionsGuard} from '../authz/permissions.guard'
@@ -23,7 +23,7 @@ export class BudgetsController {
     //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
     //@Permissions('read')
     async findAll(): Promise<Budget[]> {
-        return await this.budgetsService.findAll()
+        return await this.budgetsService.findActive()
     }
 
     @Get(':id')
@@ -36,7 +36,7 @@ export class BudgetsController {
     @Post()
     //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
     //@Permissions('create')
-    async create(@Body('budget') budget: CreateBudgetDto): Promise<Budget> {
+    async create(@Body('budget') budget: BudgetDto): Promise<Budget> {
         return await this.budgetsService.create(budget)
     }
 
@@ -45,7 +45,7 @@ export class BudgetsController {
     //@Permissions('update')
     async update(
         @Param('id') id: string,
-        @Body('budget') budget: CreateBudgetDto,
+        @Body('budget') budget: BudgetDto,
     ): Promise<Budget> {
         return await this.budgetsService.update(id, budget)
     }
@@ -60,7 +60,7 @@ export class BudgetsController {
     @Post('batch')
     //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
     //@Permissions('admin')
-    async batch(@Body() budgets: CreateBudgetDto[]): Promise<any> {
+    async batch(@Body() budgets: BudgetDto[]): Promise<any> {
         return await this.budgetsService.batchInsert(budgets)
     }
 }

@@ -3,7 +3,7 @@ import {REQUEST} from '@nestjs/core'
 import {InjectModel} from '@nestjs/mongoose'
 import {Model} from 'mongoose'
 import {Budget, BudgetDocument} from './budget.schema'
-import {CreateBudgetDto} from './create-budget.dto'
+import {BudgetDto} from './budget.dto'
 
 @Injectable()
 export class BudgetsService {
@@ -13,38 +13,77 @@ export class BudgetsService {
         private readonly budgetModel: Model<BudgetDocument>,
     ) {}
 
-    private readonly audience: string = process.env.AUTH0_AUDIENCE
+    // private readonly userEmail: string = this.request.user[
+    //     `${process.env.AUTH0_AUDIENCE}/email`
+    // ]
+    private readonly userEmail: string = 'rosstafarian1@gmail.com'
 
     async findAll(): Promise<Budget[]> {
-        const email = this.request.user[`${this.audience}/email`]
-        return this.budgetModel.find({user_email: email}).exec()
+        return await this.budgetModel.find({userEmail: this.userEmail}).exec()
     }
 
-    async create(createBudgetDto: CreateBudgetDto): Promise<Budget> {
-        const createdBudget = new this.budgetModel(createBudgetDto)
-        return createdBudget.save()
+    async findActive(): Promise<Budget[]> {
+        const currentDate: Date = new Date()
+        const firstDayOfCurrentMonth: Date = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            1,
+        )
+        firstDayOfCurrentMonth.setUTCHours(0, 0, 0, 0)
+        const lastDayOfCurrentMonth: Date = new Date(
+            currentDate.getFullYear(),
+            currentDate.getMonth() + 1,
+            0,
+        )
+        lastDayOfCurrentMonth.setUTCHours(0, 0, 0, 0)
+        return this.budgetModel.find({
+            userEmail: this.userEmail,
+            startDate: {
+                $lte: lastDayOfCurrentMonth,
+            },
+            $or: [
+                {
+                    endDate: null,
+                },
+                {
+                    endDate: {
+                        $gte: firstDayOfCurrentMonth,
+                    },
+                },
+            ],
+        })
     }
 
     async find(id): Promise<Budget> {
-        const budget = await this.budgetModel.findById(id).exec()
-        return budget
+        return await this.budgetModel
+            .findOne({_id: id, userEmail: this.userEmail})
+            .exec()
     }
 
-    async update(id, createBudgetDto: CreateBudgetDto): Promise<Budget> {
-        const editedBudget = await this.budgetModel.findByIdAndUpdate(
-            id,
-            createBudgetDto,
+    async create(budgetDto: BudgetDto): Promise<Budget> {
+        budgetDto.userEmail = this.userEmail
+        const createdBudget = new this.budgetModel(budgetDto)
+        return createdBudget.save()
+    }
+
+    async update(id, budgetDto: BudgetDto): Promise<Budget> {
+        budgetDto.userEmail = this.userEmail
+        const editedBudget = await this.budgetModel.findOneAndUpdate(
+            {_id: id, userEmail: this.userEmail},
+            budgetDto,
             {new: true},
         )
         return editedBudget
     }
 
     async delete(id): Promise<Budget> {
-        const deletedBudget = await this.budgetModel.findByIdAndRemove(id)
-        return deletedBudget
+        return await this.budgetModel.findOneAndDelete({
+            _id: id,
+            userEmail: this.userEmail,
+        })
     }
 
-    async batchInsert(batchList: CreateBudgetDto[]): Promise<any> {
+    async batchInsert(batchList: BudgetDto[]): Promise<any> {
         return await this.budgetModel
             .insertMany(batchList)
             .then(function (mongooseDocuments) {

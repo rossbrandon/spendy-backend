@@ -6,11 +6,12 @@ import {
     Post,
     Put,
     Delete,
+    Query,
     // UseGuards,
 } from '@nestjs/common'
 import {ExpensesService} from './expenses.service'
 import {Expense} from './expense.schema'
-import {CreateExpenseDto} from './create-expense.dto'
+import {ExpenseDto} from './expense.dto'
 // import {AuthGuard} from '@nestjs/passport'
 // import {Permissions} from '../authz/permissions.decorator'
 // import {PermissionsGuard} from '../authz/permissions.guard'
@@ -22,8 +23,11 @@ export class ExpensesController {
     @Get()
     //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
     //@Permissions('read')
-    async findAll(): Promise<Expense[]> {
-        return await this.expensesService.findAll()
+    async findByDateRange(
+        @Query('startDate') startDate: Date,
+        @Query('endDate') endDate: Date,
+    ): Promise<Expense[]> {
+        return await this.expensesService.findByDateRange(startDate, endDate)
     }
 
     @Get(':id')
@@ -36,7 +40,7 @@ export class ExpensesController {
     @Post()
     //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
     //@Permissions('create')
-    async create(@Body('expense') expense: CreateExpenseDto): Promise<Expense> {
+    async create(@Body('expense') expense: ExpenseDto): Promise<Expense> {
         return await this.expensesService.create(expense)
     }
 
@@ -45,7 +49,7 @@ export class ExpensesController {
     //@Permissions('update')
     async update(
         @Param('id') id: string,
-        @Body('expense') expense: CreateExpenseDto,
+        @Body('expense') expense: ExpenseDto,
     ): Promise<Expense> {
         return await this.expensesService.update(id, expense)
     }
@@ -60,7 +64,7 @@ export class ExpensesController {
     @Post('batch')
     //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
     //@Permissions('admin')
-    async batch(@Body() expenses: CreateExpenseDto[]): Promise<any> {
+    async batch(@Body() expenses: ExpenseDto[]): Promise<any> {
         return await this.expensesService.batchInsert(expenses)
     }
 }

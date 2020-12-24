@@ -1,36 +1,48 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose'
-import {Document} from 'mongoose'
+import {Document, Types} from 'mongoose'
+import {ObjectType, Field} from '@nestjs/graphql'
+import {Budget} from 'src/budgets/budget.schema'
 
 export type ExpenseDocument = Expense & Document
 
-@Schema()
+@ObjectType()
+@Schema({timestamps: true})
 export class Expense {
+    @Field()
     @Prop()
-    budget_id: string
+    userEmail: string
 
-    @Prop()
-    user_email: string
-
+    @Field()
     @Prop()
     place: string
 
+    @Field()
     @Prop()
-    date: string
+    date: Date
 
+    @Field()
     @Prop()
     price: number
 
+    @Field()
     @Prop()
     recurring: boolean
 
+    @Field({nullable: true})
     @Prop()
-    recur_until: string
+    recurUntil: Date
 
+    @Field()
     @Prop()
-    created_at: string
+    createdAt: Date
 
+    @Field()
     @Prop()
-    updated_at: string
+    updatedAt: Date
+
+    @Field(() => Budget)
+    @Prop({type: Types.ObjectId, ref: 'Budget'})
+    budget: Types.ObjectId | Budget
 }
 
 export const ExpenseSchema = SchemaFactory.createForClass(Expense)
