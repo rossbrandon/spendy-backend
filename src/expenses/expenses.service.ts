@@ -16,8 +16,7 @@ export class ExpensesService {
     private readonly audience: string = process.env.AUTH0_AUDIENCE
 
     async findAll(): Promise<Expense[]> {
-        //const email = this.request.user[`${this.audience}/email`]
-        const email = 'ross.brandon3@gmail.com'
+        const email = this.request.user[`${this.audience}/email`]
         return this.expenseModel.find({user_email: email}).exec()
     }
 
