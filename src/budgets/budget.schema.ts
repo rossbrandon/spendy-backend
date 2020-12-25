@@ -8,6 +8,9 @@ export type BudgetDocument = Budget & Document
 @Schema({timestamps: true})
 @ObjectType()
 export class Budget {
+    @Field(() => String)
+    _id: Types.ObjectId
+
     @Field()
     @Prop()
     name: string

@@ -8,6 +8,9 @@ export type ExpenseDocument = Expense & Document
 @ObjectType()
 @Schema({timestamps: true})
 export class Expense {
+    @Field(() => String)
+    _id: Types.ObjectId
+
     @Field()
     @Prop()
     userEmail: string
