@@ -32,6 +32,21 @@ export class ExpensesService {
         })
     }
 
+    async findByBudget(
+        budgetId: string,
+        startDate: Date,
+        endDate: Date,
+    ): Promise<Expense[]> {
+        return this.expenseModel.find({
+            userEmail: this.userEmail,
+            budget: budgetId,
+            date: {
+                $gte: startDate,
+                $lte: endDate,
+            },
+        })
+    }
+
     async find(id): Promise<Expense> {
         return await this.expenseModel
             .findOne({_id: id, userEmail: this.userEmail})

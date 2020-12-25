@@ -1,14 +1,34 @@
-import {Resolver, Args, Query, Mutation} from '@nestjs/graphql'
+import {
+    Resolver,
+    Args,
+    Query,
+    Mutation,
+    ResolveField,
+    Parent,
+} from '@nestjs/graphql'
 import {Inject} from '@nestjs/common'
 import {BudgetsService} from './budgets.service'
-import {Budget} from './budget.schema'
+import {Budget, BudgetDocument} from './budget.schema'
 import {BudgetDto} from './budget.dto'
+import {Expense} from 'src/expenses/expense.schema'
+import {ExpensesService} from 'src/expenses/expenses.service'
 
 @Resolver(() => Budget)
 export class BudgetsResolver {
     constructor(
         @Inject(BudgetsService) private budgetsService: BudgetsService,
+        @Inject(ExpensesService) private expensesService: ExpensesService,
     ) {}
+
+    @ResolveField(() => [Expense])
+    async expenses(
+        @Parent() budget: BudgetDocument,
+        @Args('startDate') startDate: Date,
+        @Args('endDate') endDate: Date,
+    ) {
+        const {id} = budget
+        return this.expensesService.findByBudget(id, startDate, endDate)
+    }
 
     @Query(() => [Budget])
     async budgets(): Promise<Budget[]> {

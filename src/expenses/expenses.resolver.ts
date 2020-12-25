@@ -19,6 +19,18 @@ export class ExpensesResolver {
         @Inject(ExpensesService) private expensesService: ExpensesService,
     ) {}
 
+    @ResolveField(() => Budget)
+    async budget(
+        @Parent() expense: ExpenseDocument,
+        @Args('populate') populate: boolean,
+    ) {
+        if (populate) {
+            await expense.populate('budget').execPopulate()
+        }
+
+        return expense.budget
+    }
+
     @Query(() => [Expense])
     async expenses(): Promise<Expense[]> {
         return await this.expensesService.findAll()
@@ -35,18 +47,6 @@ export class ExpensesResolver {
     @Query(() => Expense)
     async expense(@Args('id') id: string): Promise<Expense> {
         return await this.expensesService.find(id)
-    }
-
-    @ResolveField(() => Budget)
-    async budget(
-        @Parent() expense: ExpenseDocument,
-        @Args('populate') populate: boolean,
-    ) {
-        if (populate) {
-            await expense.populate('budget').execPopulate()
-        }
-
-        return expense.budget
     }
 
     @Mutation(() => Expense)

@@ -7,6 +7,8 @@ import {
     IsMongoId,
     IsDateString,
 } from 'class-validator'
+import {Types} from 'mongoose'
+import {Expense} from 'src/expenses/expense.schema'
 
 export class BudgetDto {
     @IsMongoId() @IsOptional() readonly _id: string
@@ -18,4 +20,5 @@ export class BudgetDto {
     @IsBoolean() showInMenu: boolean
     @IsDateString() @IsOptional() readonly createdAt: Date
     @IsDateString() @IsOptional() readonly updatedAt: Date
+    expenses: [Expense]
 }

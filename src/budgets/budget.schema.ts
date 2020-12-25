@@ -1,6 +1,7 @@
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose'
-import {Document} from 'mongoose'
+import {Document, Types} from 'mongoose'
 import {ObjectType, Field} from '@nestjs/graphql'
+import {Expense} from 'src/expenses/expense.schema'
 
 export type BudgetDocument = Budget & Document
 
@@ -38,6 +39,10 @@ export class Budget {
     @Field()
     @Prop()
     updatedAt: Date
+
+    @Field(() => [Expense])
+    @Prop({type: Expense, ref: 'Expense'})
+    expenses: [Expense]
 }
 
 export const BudgetSchema = SchemaFactory.createForClass(Budget)

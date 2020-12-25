@@ -11,6 +11,7 @@ type Budget {
   showInMenu: Boolean!
   createdAt: DateTime!
   updatedAt: DateTime!
+  expenses(endDate: DateTime!, startDate: DateTime!): [Expense!]!
 }
 
 """
