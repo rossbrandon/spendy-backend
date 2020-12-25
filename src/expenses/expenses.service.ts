@@ -54,7 +54,7 @@ export class ExpensesService {
     }
 
     async delete(id): Promise<Expense> {
-        return await this.expenseModel.findOneAndRemove({
+        return await this.expenseModel.findOneAndDelete({
             _id: id,
             userEmail: this.userEmail,
         })

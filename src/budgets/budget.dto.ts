@@ -10,12 +10,12 @@ import {
 
 export class BudgetDto {
     @IsMongoId() @IsOptional() readonly _id: string
-    @IsString() readonly name: string
+    @IsString() name: string
     @IsEmail() userEmail: string
-    @IsNumber() readonly amount: number
-    @IsDateString() readonly startDate: Date
-    @IsDateString() @IsOptional() readonly endDate: Date
-    @IsBoolean() readonly showInMenu: boolean
+    @IsNumber() amount: number
+    @IsDateString() startDate: Date
+    @IsDateString() @IsOptional() endDate: Date
+    @IsBoolean() showInMenu: boolean
     @IsDateString() @IsOptional() readonly createdAt: Date
     @IsDateString() @IsOptional() readonly updatedAt: Date
 }

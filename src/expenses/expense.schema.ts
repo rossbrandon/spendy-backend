@@ -26,6 +26,10 @@ export class Expense {
 
     @Field()
     @Prop()
+    reason: string
+
+    @Field()
+    @Prop()
     recurring: boolean
 
     @Field({nullable: true})
@@ -42,7 +46,7 @@ export class Expense {
 
     @Field(() => Budget)
     @Prop({type: Types.ObjectId, ref: 'Budget'})
-    budget: Types.ObjectId | Budget
+    budget: string | Types.ObjectId | Budget
 }
 
 export const ExpenseSchema = SchemaFactory.createForClass(Expense)
