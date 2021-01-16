@@ -1,9 +1,9 @@
-import {Inject, Injectable} from '@nestjs/common'
-import {REQUEST} from '@nestjs/core'
-import {InjectModel} from '@nestjs/mongoose'
-import {Model} from 'mongoose'
-import {Expense, ExpenseDocument} from './expense.schema'
-import {ExpenseDto} from './expense.dto'
+import { Inject, Injectable } from '@nestjs/common'
+import { REQUEST } from '@nestjs/core'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
+import { Expense, ExpenseDocument } from './expense.schema'
+import { ExpenseDto } from './expense.dto'
 
 @Injectable()
 export class ExpensesService {
@@ -13,18 +13,13 @@ export class ExpensesService {
         private readonly expenseModel: Model<ExpenseDocument>,
     ) {}
 
-    // private readonly userEmail: string = this.request.user[
-    //     `${process.env.AUTH0_AUDIENCE}/email`
-    // ]
-    private readonly userEmail: string = 'rosstafarian1@gmail.com'
-
     async findAll(): Promise<Expense[]> {
-        return this.expenseModel.find({userEmail: this.userEmail}).exec()
+        return this.expenseModel.find({ userEmail: this.getUserEmail() }).exec()
     }
 
     async findByDateRange(startDate: Date, endDate: Date): Promise<Expense[]> {
         return this.expenseModel.find({
-            userEmail: this.userEmail,
+            userEmail: this.getUserEmail(),
             date: {
                 $gte: startDate,
                 $lte: endDate,
@@ -38,7 +33,7 @@ export class ExpensesService {
         endDate: Date,
     ): Promise<Expense[]> {
         return this.expenseModel.find({
-            userEmail: this.userEmail,
+            userEmail: this.getUserEmail(),
             budget: budgetId,
             date: {
                 $gte: startDate,
@@ -49,21 +44,21 @@ export class ExpensesService {
 
     async find(id): Promise<Expense> {
         return await this.expenseModel
-            .findOne({_id: id, userEmail: this.userEmail})
+            .findOne({ _id: id, userEmail: this.getUserEmail() })
             .exec()
     }
 
     async create(expenseDto: ExpenseDto): Promise<Expense> {
-        expenseDto.userEmail = this.userEmail
+        expenseDto.userEmail = this.getUserEmail()
         const createdExpense = new this.expenseModel(expenseDto)
         return createdExpense.save()
     }
 
     async update(id, expenseDto: ExpenseDto): Promise<Expense> {
         const editedExpense = await this.expenseModel.findOneAndUpdate(
-            {_id: id, userEmail: this.userEmail},
+            { _id: id, userEmail: this.getUserEmail() },
             expenseDto,
-            {new: true},
+            { new: true },
         )
         return editedExpense
     }
@@ -71,7 +66,7 @@ export class ExpensesService {
     async delete(id): Promise<Expense> {
         return await this.expenseModel.findOneAndDelete({
             _id: id,
-            userEmail: this.userEmail,
+            userEmail: this.getUserEmail(),
         })
     }
 
@@ -86,5 +81,13 @@ export class ExpensesService {
                 console.log(`An error occurred: ${err}`)
                 return `An error occurred: ${err}`
             })
+    }
+
+    private getUserEmail(): string {
+        const user =
+            this.request.user === undefined
+                ? this.request.req.user
+                : this.request.user
+        return user[`${process.env.AUTH0_AUDIENCE}email`]
     }
 }

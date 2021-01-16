@@ -1,9 +1,9 @@
-import {Inject, Injectable} from '@nestjs/common'
-import {REQUEST} from '@nestjs/core'
-import {InjectModel} from '@nestjs/mongoose'
-import {Model} from 'mongoose'
-import {Budget, BudgetDocument} from './budget.schema'
-import {BudgetDto} from './budget.dto'
+import { Inject, Injectable } from '@nestjs/common'
+import { REQUEST } from '@nestjs/core'
+import { InjectModel } from '@nestjs/mongoose'
+import { Model } from 'mongoose'
+import { Budget, BudgetDocument } from './budget.schema'
+import { BudgetDto } from './budget.dto'
 
 @Injectable()
 export class BudgetsService {
@@ -13,13 +13,10 @@ export class BudgetsService {
         private readonly budgetModel: Model<BudgetDocument>,
     ) {}
 
-    // private readonly userEmail: string = this.request.user[
-    //     `${process.env.AUTH0_AUDIENCE}/email`
-    // ]
-    private readonly userEmail: string = 'rosstafarian1@gmail.com'
-
     async findAll(): Promise<Budget[]> {
-        return await this.budgetModel.find({userEmail: this.userEmail}).exec()
+        return await this.budgetModel
+            .find({ userEmail: this.getUserEmail() })
+            .exec()
     }
 
     async findActive(): Promise<Budget[]> {
@@ -37,7 +34,7 @@ export class BudgetsService {
         )
         lastDayOfCurrentMonth.setUTCHours(0, 0, 0, 0)
         return this.budgetModel.find({
-            userEmail: this.userEmail,
+            userEmail: this.getUserEmail(),
             startDate: {
                 $lte: lastDayOfCurrentMonth,
             },
@@ -56,22 +53,22 @@ export class BudgetsService {
 
     async find(id): Promise<Budget> {
         return await this.budgetModel
-            .findOne({_id: id, userEmail: this.userEmail})
+            .findOne({ _id: id, userEmail: this.getUserEmail() })
             .exec()
     }
 
     async create(budgetDto: BudgetDto): Promise<Budget> {
-        budgetDto.userEmail = this.userEmail
+        budgetDto.userEmail = this.getUserEmail()
         const createdBudget = new this.budgetModel(budgetDto)
         return createdBudget.save()
     }
 
     async update(id, budgetDto: BudgetDto): Promise<Budget> {
-        budgetDto.userEmail = this.userEmail
+        budgetDto.userEmail = this.getUserEmail()
         const editedBudget = await this.budgetModel.findOneAndUpdate(
-            {_id: id, userEmail: this.userEmail},
+            { _id: id, userEmail: this.getUserEmail() },
             budgetDto,
-            {new: true},
+            { new: true },
         )
         return editedBudget
     }
@@ -79,7 +76,7 @@ export class BudgetsService {
     async delete(id): Promise<Budget> {
         return await this.budgetModel.findOneAndDelete({
             _id: id,
-            userEmail: this.userEmail,
+            userEmail: this.getUserEmail(),
         })
     }
 
@@ -94,5 +91,13 @@ export class BudgetsService {
                 console.log(`An error occurred: ${err}`)
                 return `An error occurred: ${err}`
             })
+    }
+
+    private getUserEmail(): string {
+        const user =
+            this.request.user === undefined
+                ? this.request.req.user
+                : this.request.user
+        return user[`${process.env.AUTH0_AUDIENCE}email`]
     }
 }

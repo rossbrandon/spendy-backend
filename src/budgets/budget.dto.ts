@@ -7,8 +7,8 @@ import {
     IsMongoId,
     IsDateString,
 } from 'class-validator'
-import {Types} from 'mongoose'
-import {Expense} from 'src/expenses/expense.schema'
+import { Types } from 'mongoose'
+import { Expense } from 'src/expenses/expense.schema'
 
 export class BudgetDto {
     @IsMongoId() @IsOptional() readonly _id: string

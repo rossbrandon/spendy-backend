@@ -6,43 +6,43 @@ import {
     Post,
     Put,
     Delete,
-    // UseGuards,
+    UseGuards,
 } from '@nestjs/common'
-import {BudgetsService} from './budgets.service'
-import {Budget} from './budget.schema'
-import {BudgetDto} from './budget.dto'
-// import {AuthGuard} from '@nestjs/passport'
-// import {Permissions} from '../authz/permissions.decorator'
-// import {PermissionsGuard} from '../authz/permissions.guard'
+import { BudgetsService } from './budgets.service'
+import { Budget } from './budget.schema'
+import { BudgetDto } from './budget.dto'
+import { AuthGuard } from '@nestjs/passport'
+import { Permissions } from '../authz/permissions.decorator'
+import { PermissionsGuard } from '../authz/permissions.guard'
 
 @Controller('budgets')
 export class BudgetsController {
     constructor(private readonly budgetsService: BudgetsService) {}
 
     @Get()
-    //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    //@Permissions('read')
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions('read:budgets')
     async findAll(): Promise<Budget[]> {
         return await this.budgetsService.findActive()
     }
 
     @Get(':id')
-    //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    //@Permissions('read')
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions('read:budgets')
     async find(@Param('id') id: string): Promise<Budget> {
         return await this.budgetsService.find(id)
     }
 
     @Post()
-    //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    //@Permissions('create')
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions('create:budgets')
     async create(@Body('budget') budget: BudgetDto): Promise<Budget> {
         return await this.budgetsService.create(budget)
     }
 
     @Put(':id')
-    //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    //@Permissions('update')
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions('update:budgets')
     async update(
         @Param('id') id: string,
         @Body('budget') budget: BudgetDto,
@@ -51,15 +51,15 @@ export class BudgetsController {
     }
 
     @Delete(':id')
-    //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    //@Permissions('delete')
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions('delete:budgets')
     async delete(@Param('id') id: string): Promise<Budget> {
         return await this.budgetsService.delete(id)
     }
 
     @Post('batch')
-    //@UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    //@Permissions('admin')
+    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
+    @Permissions('admin')
     async batch(@Body() budgets: BudgetDto[]): Promise<any> {
         return await this.budgetsService.batchInsert(budgets)
     }

@@ -1,12 +1,12 @@
-import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose'
-import {Document, Types} from 'mongoose'
-import {ObjectType, Field} from '@nestjs/graphql'
-import {Budget} from 'src/budgets/budget.schema'
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
+import { Document, Types } from 'mongoose'
+import { ObjectType, Field } from '@nestjs/graphql'
+import { Budget } from 'src/budgets/budget.schema'
 
 export type ExpenseDocument = Expense & Document
 
 @ObjectType()
-@Schema({timestamps: true})
+@Schema({ timestamps: true })
 export class Expense {
     @Field(() => String)
     _id: Types.ObjectId
@@ -35,7 +35,7 @@ export class Expense {
     @Prop()
     recurring: boolean
 
-    @Field({nullable: true})
+    @Field({ nullable: true })
     @Prop()
     recurUntil: Date
 
@@ -48,7 +48,7 @@ export class Expense {
     updatedAt: Date
 
     @Field(() => Budget)
-    @Prop({type: Types.ObjectId, ref: 'Budget'})
+    @Prop({ type: Types.ObjectId, ref: 'Budget' })
     budget: string | Types.ObjectId | Budget
 }
 
