@@ -8,7 +8,7 @@ import {
 } from '@nestjs/graphql'
 import { Inject, UseGuards } from '@nestjs/common'
 import { ExpensesService } from './expenses.service'
-import { Expense, ExpenseDocument } from './expense.schema'
+import { Expense, ExpenseDocument, Aggregate } from './expense.schema'
 import { Budget } from '../budgets/budget.schema'
 import { ExpenseDto } from './expense.dto'
 import { Permissions } from '../authz/permissions.decorator'
@@ -23,7 +23,7 @@ export class ExpensesResolver {
 
     @ResolveField(() => Budget)
     @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:expenses')
+    @Permissions('read:budgets')
     async budget(
         @Parent() expense: ExpenseDocument,
         @Args('populate') populate: boolean,
@@ -57,6 +57,16 @@ export class ExpensesResolver {
     @Permissions('read:expenses')
     async expense(@Args('id') id: string): Promise<Expense> {
         return await this.expensesService.find(id)
+    }
+
+    @Query(() => [Aggregate])
+    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
+    @Permissions('read:expenses')
+    async aggregate(
+        @Args('startDate') startDate: Date,
+        @Args('endDate') endDate: Date,
+    ): Promise<Aggregate[]> {
+        return await this.expensesService.aggregateSum(startDate, endDate)
     }
 
     @Mutation(() => Expense)

@@ -13,6 +13,7 @@ type Budget {
   createdAt: DateTime!
   updatedAt: DateTime!
   expenses(endDate: DateTime!, startDate: DateTime!): [Expense!]!
+  sum(endDate: DateTime!, startDate: DateTime!): [Aggregate!]!
 }
 
 """
@@ -34,12 +35,18 @@ type Expense {
   budget(populate: Boolean!): Budget!
 }
 
+type Aggregate {
+  budget: String!
+  total: Float!
+}
+
 type Query {
   budgets: [Budget!]!
   budget(id: String!): Budget!
   expenses: [Expense!]!
   expensesByDateRange(endDate: DateTime!, startDate: DateTime!): [Expense!]!
   expense(id: String!): Expense!
+  aggregate(endDate: DateTime!, startDate: DateTime!): [Aggregate!]!
 }
 
 type Mutation {

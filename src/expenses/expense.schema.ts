@@ -52,4 +52,16 @@ export class Expense {
     budget: string | Types.ObjectId | Budget
 }
 
+@ObjectType()
+@Schema()
+export class Aggregate {
+    @Field(() => String)
+    budget: Types.ObjectId
+
+    @Field()
+    @Prop()
+    total: number
+}
+
 export const ExpenseSchema = SchemaFactory.createForClass(Expense)
+export const AggregateSchema = SchemaFactory.createForClass(Aggregate)

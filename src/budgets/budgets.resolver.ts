@@ -10,7 +10,7 @@ import { Inject, UseGuards } from '@nestjs/common'
 import { BudgetsService } from './budgets.service'
 import { Budget, BudgetDocument } from './budget.schema'
 import { BudgetDto } from './budget.dto'
-import { Expense } from 'src/expenses/expense.schema'
+import { Expense, Aggregate } from 'src/expenses/expense.schema'
 import { ExpensesService } from 'src/expenses/expenses.service'
 import { Permissions } from '../authz/permissions.decorator'
 import { GqlPermissionsGuard } from '../authz/gqlpermissions.guard'
@@ -25,7 +25,7 @@ export class BudgetsResolver {
 
     @ResolveField(() => [Expense])
     @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:budgets')
+    @Permissions('read:expenses')
     async expenses(
         @Parent() budget: BudgetDocument,
         @Args('startDate') startDate: Date,
@@ -33,6 +33,18 @@ export class BudgetsResolver {
     ) {
         const { id } = budget
         return this.expensesService.findByBudget(id, startDate, endDate)
+    }
+
+    @ResolveField(() => [Aggregate])
+    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
+    @Permissions('read:expenses')
+    async sum(
+        @Parent() budget: BudgetDocument,
+        @Args('startDate') startDate: Date,
+        @Args('endDate') endDate: Date,
+    ) {
+        const { id } = budget
+        return this.expensesService.budgetSum(id, startDate, endDate)
     }
 
     @Query(() => [Budget])
