@@ -15,7 +15,7 @@ import { AuthGuard } from '@nestjs/passport'
 import { Permissions } from '../authz/permissions.decorator'
 import { PermissionsGuard } from '../authz/permissions.guard'
 
-@Controller('budgets')
+@Controller('v1/budgets')
 export class BudgetsController {
     constructor(private readonly budgetsService: BudgetsService) {}
 
