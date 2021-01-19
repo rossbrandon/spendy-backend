@@ -20,29 +20,25 @@ export class BudgetsController {
     constructor(private readonly budgetsService: BudgetsService) {}
 
     @Get()
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('read:budgets')
+    @UseGuards(AuthGuard('jwt'))
     async findAll(): Promise<Budget[]> {
         return await this.budgetsService.findActive()
     }
 
     @Get(':id')
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('read:budgets')
+    @UseGuards(AuthGuard('jwt'))
     async find(@Param('id') id: string): Promise<Budget> {
         return await this.budgetsService.find(id)
     }
 
     @Post()
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('create:budgets')
+    @UseGuards(AuthGuard('jwt'))
     async create(@Body('budget') budget: BudgetDto): Promise<Budget> {
         return await this.budgetsService.create(budget)
     }
 
     @Put(':id')
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('update:budgets')
+    @UseGuards(AuthGuard('jwt'))
     async update(
         @Param('id') id: string,
         @Body('budget') budget: BudgetDto,
@@ -51,8 +47,7 @@ export class BudgetsController {
     }
 
     @Delete(':id')
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('delete:budgets')
+    @UseGuards(AuthGuard('jwt'))
     async delete(@Param('id') id: string): Promise<Budget> {
         return await this.budgetsService.delete(id)
     }

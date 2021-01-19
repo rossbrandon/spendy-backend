@@ -12,8 +12,6 @@ import { Budget, BudgetDocument } from './budget.schema'
 import { BudgetDto } from './budget.dto'
 import { Expense, Aggregate } from 'src/expenses/expense.schema'
 import { ExpensesService } from 'src/expenses/expenses.service'
-import { Permissions } from '../authz/permissions.decorator'
-import { GqlPermissionsGuard } from '../authz/gqlpermissions.guard'
 import { GqlAuthGuard } from '../authz/gqlauth.guard'
 
 @Resolver(() => Budget)
@@ -24,8 +22,7 @@ export class BudgetsResolver {
     ) {}
 
     @ResolveField(() => [Expense])
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:expenses')
+    @UseGuards(GqlAuthGuard)
     async expenses(
         @Parent() budget: BudgetDocument,
         @Args('startDate') startDate: Date,
@@ -36,8 +33,7 @@ export class BudgetsResolver {
     }
 
     @ResolveField(() => [Aggregate])
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:expenses')
+    @UseGuards(GqlAuthGuard)
     async sum(
         @Parent() budget: BudgetDocument,
         @Args('startDate') startDate: Date,
@@ -48,22 +44,19 @@ export class BudgetsResolver {
     }
 
     @Query(() => [Budget])
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:budgets')
+    @UseGuards(GqlAuthGuard)
     async budgets(): Promise<Budget[]> {
         return await this.budgetsService.findActive()
     }
 
     @Query(() => Budget)
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:budgets')
+    @UseGuards(GqlAuthGuard)
     async budget(@Args('id') id: string): Promise<Budget> {
         return await this.budgetsService.find(id)
     }
 
     @Mutation(() => Budget)
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('create:budgets')
+    @UseGuards(GqlAuthGuard)
     async createBudget(
         @Args('name') name: string,
         @Args('amount') amount: number,
@@ -81,8 +74,7 @@ export class BudgetsResolver {
     }
 
     @Mutation(() => Budget)
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('update:budgets')
+    @UseGuards(GqlAuthGuard)
     async updateBudget(
         @Args('id') id: string,
         @Args('name') name: string,
@@ -101,8 +93,7 @@ export class BudgetsResolver {
     }
 
     @Mutation(() => Budget)
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('delete:budgets')
+    @UseGuards(GqlAuthGuard)
     async deleteBudget(@Args('id') id: string): Promise<Budget> {
         return await this.budgetsService.delete(id)
     }

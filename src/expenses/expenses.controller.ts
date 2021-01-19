@@ -21,8 +21,7 @@ export class ExpensesController {
     constructor(private readonly expensesService: ExpensesService) {}
 
     @Get()
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('read:expenses')
+    @UseGuards(AuthGuard('jwt'))
     async findByDateRange(
         @Query('startDate') startDate: Date,
         @Query('endDate') endDate: Date,
@@ -31,8 +30,7 @@ export class ExpensesController {
     }
 
     @Get('aggregate')
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('read:expenses')
+    @UseGuards(AuthGuard('jwt'))
     async aggregate(
         @Query('startDate') startDate: Date,
         @Query('endDate') endDate: Date,
@@ -41,22 +39,19 @@ export class ExpensesController {
     }
 
     @Get(':id')
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('read:expenses')
+    @UseGuards(AuthGuard('jwt'))
     async find(@Param('id') id: string): Promise<Expense> {
         return await this.expensesService.find(id)
     }
 
     @Post()
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('create:expenses')
+    @UseGuards(AuthGuard('jwt'))
     async create(@Body('expense') expense: ExpenseDto): Promise<Expense> {
         return await this.expensesService.create(expense)
     }
 
     @Put(':id')
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('update')
+    @UseGuards(AuthGuard('jwt'))
     async update(
         @Param('id') id: string,
         @Body('expense:expenses') expense: ExpenseDto,
@@ -65,8 +60,7 @@ export class ExpensesController {
     }
 
     @Delete(':id')
-    @UseGuards(AuthGuard('jwt'), PermissionsGuard)
-    @Permissions('delete:expenses')
+    @UseGuards(AuthGuard('jwt'))
     async delete(@Param('id') id: string): Promise<Expense> {
         return await this.expensesService.delete(id)
     }

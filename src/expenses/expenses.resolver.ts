@@ -11,8 +11,6 @@ import { ExpensesService } from './expenses.service'
 import { Expense, ExpenseDocument, Aggregate } from './expense.schema'
 import { Budget } from '../budgets/budget.schema'
 import { ExpenseDto } from './expense.dto'
-import { Permissions } from '../authz/permissions.decorator'
-import { GqlPermissionsGuard } from '../authz/gqlpermissions.guard'
 import { GqlAuthGuard } from '../authz/gqlauth.guard'
 
 @Resolver(() => Expense)
@@ -22,8 +20,7 @@ export class ExpensesResolver {
     ) {}
 
     @ResolveField(() => Budget)
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:budgets')
+    @UseGuards(GqlAuthGuard)
     async budget(
         @Parent() expense: ExpenseDocument,
         @Args('populate') populate: boolean,
@@ -36,15 +33,13 @@ export class ExpensesResolver {
     }
 
     @Query(() => [Expense])
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:expenses')
+    @UseGuards(GqlAuthGuard)
     async expenses(): Promise<Expense[]> {
         return await this.expensesService.findAll()
     }
 
     @Query(() => [Expense])
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:expenses')
+    @UseGuards(GqlAuthGuard)
     async expensesByDateRange(
         @Args('startDate') startDate: Date,
         @Args('endDate') endDate: Date,
@@ -53,15 +48,13 @@ export class ExpensesResolver {
     }
 
     @Query(() => Expense)
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:expenses')
+    @UseGuards(GqlAuthGuard)
     async expense(@Args('id') id: string): Promise<Expense> {
         return await this.expensesService.find(id)
     }
 
     @Query(() => [Aggregate])
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('read:expenses')
+    @UseGuards(GqlAuthGuard)
     async aggregate(
         @Args('startDate') startDate: Date,
         @Args('endDate') endDate: Date,
@@ -70,8 +63,7 @@ export class ExpensesResolver {
     }
 
     @Mutation(() => Expense)
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('create:expenses')
+    @UseGuards(GqlAuthGuard)
     async createExpense(
         @Args('place') place: string,
         @Args('price') price: number,
@@ -93,8 +85,7 @@ export class ExpensesResolver {
     }
 
     @Mutation(() => Expense)
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('update:expenses')
+    @UseGuards(GqlAuthGuard)
     async updateExpense(
         @Args('id') id: string,
         @Args('place') place: string,
@@ -117,8 +108,7 @@ export class ExpensesResolver {
     }
 
     @Mutation(() => Expense)
-    @UseGuards(GqlAuthGuard, GqlPermissionsGuard)
-    @Permissions('delete:expenses')
+    @UseGuards(GqlAuthGuard)
     async deleteExpense(@Args('id') id: string): Promise<Expense> {
         return await this.expensesService.delete(id)
     }
