@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import { REQUEST } from '@nestjs/core'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { Expense, ExpenseDocument, Aggregate } from './expense.schema'
+import { Expense, ExpenseDocument, BudgetSum } from './expense.schema'
 import { ExpenseDto } from './expense.dto'
 
 @Injectable()
@@ -48,42 +48,11 @@ export class ExpensesService {
             .exec()
     }
 
-    async aggregateSum(startDate: Date, endDate: Date): Promise<Aggregate[]> {
-        return await this.expenseModel
-            .aggregate([
-                {
-                    $match: {
-                        userEmail: this.getUserEmail(),
-                        date: {
-                            $gte: new Date(startDate),
-                            $lte: new Date(endDate),
-                        },
-                    },
-                },
-                {
-                    $group: {
-                        _id: '$budget',
-                        total: {
-                            $sum: '$price',
-                        },
-                    },
-                },
-                {
-                    $project: {
-                        _id: 0,
-                        budget: '$_id',
-                        total: 1,
-                    },
-                },
-            ])
-            .exec()
-    }
-
     async budgetSum(
         budgetId: string,
         startDate: Date,
         endDate: Date,
-    ): Promise<Aggregate[]> {
+    ): Promise<BudgetSum[]> {
         return await this.expenseModel
             .aggregate([
                 {

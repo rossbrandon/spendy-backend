@@ -10,7 +10,7 @@ import {
     UseGuards,
 } from '@nestjs/common'
 import { ExpensesService } from './expenses.service'
-import { Expense, Aggregate } from './expense.schema'
+import { Expense } from './expense.schema'
 import { ExpenseDto } from './expense.dto'
 import { AuthGuard } from '@nestjs/passport'
 import { Permissions } from '../authz/permissions.decorator'
@@ -27,15 +27,6 @@ export class ExpensesController {
         @Query('endDate') endDate: Date,
     ): Promise<Expense[]> {
         return await this.expensesService.findByDateRange(startDate, endDate)
-    }
-
-    @Get('aggregate')
-    @UseGuards(AuthGuard('jwt'))
-    async aggregate(
-        @Query('startDate') startDate: Date,
-        @Query('endDate') endDate: Date,
-    ): Promise<Aggregate[]> {
-        return await this.expensesService.aggregateSum(startDate, endDate)
     }
 
     @Get(':id')

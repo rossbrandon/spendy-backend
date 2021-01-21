@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose'
 import { GraphQLModule } from '@nestjs/graphql'
 import { AuthzModule } from './authz/authz.module'
 import { BudgetsModule } from './budgets/budgets.module'
-import { ExpensesModule } from './expenses/expenses.module'
+import { ExpensesModule } from './aggregates/aggregates.module'
 import { join } from 'path'
 
 @Module({

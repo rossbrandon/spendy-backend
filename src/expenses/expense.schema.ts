@@ -54,7 +54,7 @@ export class Expense {
 
 @ObjectType()
 @Schema()
-export class Aggregate {
+export class BudgetSum {
     @Field(() => String)
     budget: Types.ObjectId
 
@@ -64,4 +64,4 @@ export class Aggregate {
 }
 
 export const ExpenseSchema = SchemaFactory.createForClass(Expense)
-export const AggregateSchema = SchemaFactory.createForClass(Aggregate)
+export const BudgetSumSchema = SchemaFactory.createForClass(BudgetSum)
