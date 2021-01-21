@@ -22,7 +22,7 @@ forever list | grep 'spendy-backend'
 
 echo "Restarting app server..."
 if forever list | grep 'spendy-backend'; then forever stop spendy-backend; fi
-forever -a --uid spendy-backend start /home/bitnami/stack/projects/spendy-backend/dist/main.js
+forever -a --uid spendy-backend start dist/main.js
 
 echo "New process:"
 forever list | grep 'spendy-backend'
