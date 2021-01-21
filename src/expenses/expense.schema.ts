@@ -60,6 +60,10 @@ export class Aggregate {
 
     @Field()
     @Prop()
+    month: number
+
+    @Field()
+    @Prop()
     total: number
 }
 

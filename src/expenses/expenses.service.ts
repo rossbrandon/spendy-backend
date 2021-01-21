@@ -62,7 +62,10 @@ export class ExpensesService {
                 },
                 {
                     $group: {
-                        _id: '$budget',
+                        _id: {
+                            month: { $substr: ['$date', 5, 2] },
+                            budget: '$budget',
+                        },
                         total: {
                             $sum: '$price',
                         },
@@ -71,7 +74,8 @@ export class ExpensesService {
                 {
                     $project: {
                         _id: 0,
-                        budget: '$_id',
+                        budget: '$_id.budget',
+                        month: '$_id.month',
                         total: 1,
                     },
                 },

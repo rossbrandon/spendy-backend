@@ -37,6 +37,7 @@ type Expense {
 
 type Aggregate {
   budget: String!
+  month: Float!
   total: Float!
 }
 
