@@ -1,3 +1,8 @@
+language: node_js
+node_js:
+    - 'stable'
+cache: npm
+
 addons:
     ssh_known_hosts: 54.236.198.173
 
@@ -6,11 +11,6 @@ before_install:
     - eval "$(ssh-agent -s)"
     - chmod 600 /tmp/deploy_rsa
     - ssh-add /tmp/deploy_rsa
-
-language: node_js
-node_js:
-    - 'stable'
-cache: npm
 
 install:
     - npm install
