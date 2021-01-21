@@ -21,9 +21,9 @@ script:
 deploy:
     - provider: script
       skip_cleanup: true
-      script: rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/dist bitnami@54.236.198.173:/home/bitnami/stack/projects/spendy-backend/
+      script: scp -r $TRAVIS_BUILD_DIR/dist bitnami@54.236.198.173:/home/bitnami/stack/projects/spendy-backend/
       on:
           branch: main
 
-after_success:
+after_deploy:
     - ssh bitnami@54.236.198.173 /home/bitnami/stack/projects/spendy-backend/redeploy.sh
