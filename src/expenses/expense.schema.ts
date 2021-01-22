@@ -60,7 +60,7 @@ export class Aggregate {
 
     @Field()
     @Prop()
-    month: number
+    month: string
 
     @Field()
     @Prop()
