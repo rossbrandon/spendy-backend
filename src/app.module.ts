@@ -8,7 +8,9 @@ import { ExpensesModule } from './expenses/expenses.module'
 
 @Module({
     imports: [
-        MongooseModule.forRoot(process.env.MONGO_URL),
+        MongooseModule.forRoot(process.env.MONGO_URL, {
+            useFindAndModify: false,
+        }),
         GraphQLModule.forRoot({
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
             context: ({ req }) => ({ req }),

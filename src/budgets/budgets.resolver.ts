@@ -46,6 +46,12 @@ export class BudgetsResolver {
     @Query(() => [Budget])
     @UseGuards(GqlAuthGuard)
     async budgets(): Promise<Budget[]> {
+        return await this.budgetsService.findAll()
+    }
+
+    @Query(() => [Budget])
+    @UseGuards(GqlAuthGuard)
+    async activeBudgets(): Promise<Budget[]> {
         return await this.budgetsService.findActive()
     }
 
@@ -63,6 +69,7 @@ export class BudgetsResolver {
         @Args('startDate') startDate: Date,
         @Args('endDate', { nullable: true }) endDate: Date,
         @Args('showInMenu') showInMenu: boolean,
+        @Args('sortOrder') sortOrder: number,
     ): Promise<Budget> {
         const budgetDto: BudgetDto = new BudgetDto()
         budgetDto.name = name
@@ -70,6 +77,7 @@ export class BudgetsResolver {
         budgetDto.startDate = startDate
         budgetDto.endDate = endDate
         budgetDto.showInMenu = showInMenu
+        budgetDto.sortOrder = sortOrder
         return await this.budgetsService.create(budgetDto)
     }
 
@@ -82,6 +90,7 @@ export class BudgetsResolver {
         @Args('startDate') startDate: Date,
         @Args('endDate', { nullable: true }) endDate: Date,
         @Args('showInMenu') showInMenu: boolean,
+        @Args('sortOrder') sortOrder: number,
     ): Promise<Budget> {
         const budgetDto: BudgetDto = new BudgetDto()
         budgetDto.name = name
@@ -89,6 +98,7 @@ export class BudgetsResolver {
         budgetDto.startDate = startDate
         budgetDto.endDate = endDate
         budgetDto.showInMenu = showInMenu
+        budgetDto.sortOrder = sortOrder
         return await this.budgetsService.update(id, budgetDto)
     }
 

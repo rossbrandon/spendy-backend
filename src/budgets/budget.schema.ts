@@ -37,6 +37,10 @@ export class Budget {
 
     @Field()
     @Prop()
+    sortOrder: number
+
+    @Field()
+    @Prop()
     createdAt: Date
 
     @Field()

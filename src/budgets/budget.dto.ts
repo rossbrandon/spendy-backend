@@ -17,6 +17,7 @@ export class BudgetDto {
     @IsDateString() startDate: Date
     @IsDateString() @IsOptional() endDate: Date
     @IsBoolean() showInMenu: boolean
+    @IsNumber() sortOrder: number
     @IsDateString() @IsOptional() readonly createdAt: Date
     @IsDateString() @IsOptional() readonly updatedAt: Date
     expenses: [Expense]
