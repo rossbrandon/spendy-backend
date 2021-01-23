@@ -91,6 +91,9 @@
         }
     },
     "lint-staged": {
-        "*.js": "eslint --cache --fix"
+        ".{ts,css,json,md}": [
+            "npm run format:fix",
+            "npm run lint:fix"
+        ]
     }
 }
