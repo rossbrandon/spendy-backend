@@ -40,6 +40,8 @@ type Aggregate {
   budget: String!
   month: String!
   total: Float!
+  place: String!
+  count: Float!
 }
 
 type Query {
@@ -49,7 +51,8 @@ type Query {
   expenses: [Expense!]!
   expensesByDateRange(endDate: DateTime!, startDate: DateTime!): [Expense!]!
   expense(id: String!): Expense!
-  aggregate(endDate: DateTime!, startDate: DateTime!): [Aggregate!]!
+  aggregateSum(endDate: DateTime!, startDate: DateTime!): [Aggregate!]!
+  aggregatePlaces: [Aggregate!]!
 }
 
 type Mutation {

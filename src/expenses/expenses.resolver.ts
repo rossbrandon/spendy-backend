@@ -55,11 +55,17 @@ export class ExpensesResolver {
 
     @Query(() => [Aggregate])
     @UseGuards(GqlAuthGuard)
-    async aggregate(
+    async aggregateSum(
         @Args('startDate') startDate: Date,
         @Args('endDate') endDate: Date,
     ): Promise<Aggregate[]> {
         return await this.expensesService.aggregateSum(startDate, endDate)
+    }
+
+    @Query(() => [Aggregate])
+    @UseGuards(GqlAuthGuard)
+    async aggregatePlaces(): Promise<Aggregate[]> {
+        return await this.expensesService.aggregatePlaces()
     }
 
     @Mutation(() => Expense)

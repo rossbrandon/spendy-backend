@@ -22,7 +22,7 @@ export class BudgetsController {
     @Get()
     @UseGuards(AuthGuard('jwt'))
     async findAll(): Promise<Budget[]> {
-        return await this.budgetsService.findActive()
+        return await this.budgetsService.findAll()
     }
 
     @Get(':id')

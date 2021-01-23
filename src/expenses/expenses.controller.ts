@@ -29,13 +29,19 @@ export class ExpensesController {
         return await this.expensesService.findByDateRange(startDate, endDate)
     }
 
-    @Get('aggregate')
+    @Get('aggregate/sum')
     @UseGuards(AuthGuard('jwt'))
-    async aggregate(
+    async aggregateSum(
         @Query('startDate') startDate: Date,
         @Query('endDate') endDate: Date,
     ): Promise<Aggregate[]> {
         return await this.expensesService.aggregateSum(startDate, endDate)
+    }
+
+    @Get('aggregate/places')
+    @UseGuards(AuthGuard('jwt'))
+    async aggregatePlaces(): Promise<Aggregate[]> {
+        return await this.expensesService.aggregatePlaces()
     }
 
     @Get(':id')

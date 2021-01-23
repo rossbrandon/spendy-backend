@@ -83,6 +83,36 @@ export class ExpensesService {
             .exec()
     }
 
+    async aggregatePlaces(): Promise<Aggregate[]> {
+        return await this.expenseModel
+            .aggregate([
+                {
+                    $match: {
+                        userEmail: this.getUserEmail(),
+                    },
+                },
+                { $unwind: '$place' },
+                {
+                    $group: {
+                        _id: {
+                            place: '$place',
+                        },
+                        count: { $sum: 1 },
+                    },
+                },
+                { $sort: { count: -1 } },
+                { $limit: 10 },
+                {
+                    $project: {
+                        _id: 0,
+                        place: '$_id.place',
+                        count: 1,
+                    },
+                },
+            ])
+            .exec()
+    }
+
     async budgetSum(
         budgetId: string,
         startDate: Date,

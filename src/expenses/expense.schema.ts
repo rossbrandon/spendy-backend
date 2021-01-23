@@ -65,6 +65,14 @@ export class Aggregate {
     @Field()
     @Prop()
     total: number
+
+    @Field()
+    @Prop()
+    place: string
+
+    @Field()
+    @Prop()
+    count: number
 }
 
 export const ExpenseSchema = SchemaFactory.createForClass(Expense)
