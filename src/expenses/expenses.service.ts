@@ -2,8 +2,8 @@ import { Inject, Injectable } from '@nestjs/common'
 import { REQUEST } from '@nestjs/core'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { Expense, ExpenseDocument, Aggregate } from './expense.schema'
 import { ExpenseDto } from './expense.dto'
+import { Aggregate, Expense, ExpenseDocument } from './expense.schema'
 
 @Injectable()
 export class ExpensesService {

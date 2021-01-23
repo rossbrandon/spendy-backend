@@ -1,14 +1,14 @@
 import {
-    IsString,
-    IsNumber,
-    IsOptional,
     IsBoolean,
     IsDateString,
     IsEmail,
     IsMongoId,
+    IsNumber,
+    IsOptional,
+    IsString,
 } from 'class-validator'
-import { Budget } from 'src/budgets/budget.schema'
 import { Types } from 'mongoose'
+import { Budget } from 'src/budgets/budget.schema'
 
 export class ExpenseDto {
     @IsMongoId() @IsOptional() readonly _id: string

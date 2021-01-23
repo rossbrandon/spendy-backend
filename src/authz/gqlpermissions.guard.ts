@@ -1,7 +1,7 @@
 import { CanActivate, Injectable } from '@nestjs/common'
-import { Observable } from 'rxjs'
 import { Reflector } from '@nestjs/core'
 import { GqlExecutionContext } from '@nestjs/graphql'
+import { Observable } from 'rxjs'
 
 @Injectable()
 export class GqlPermissionsGuard implements CanActivate {

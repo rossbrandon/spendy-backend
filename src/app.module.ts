@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common'
-import { MongooseModule } from '@nestjs/mongoose'
 import { GraphQLModule } from '@nestjs/graphql'
+import { MongooseModule } from '@nestjs/mongoose'
+import { join } from 'path'
 import { AuthzModule } from './authz/authz.module'
 import { BudgetsModule } from './budgets/budgets.module'
 import { ExpensesModule } from './expenses/expenses.module'
-import { join } from 'path'
 
 @Module({
     imports: [

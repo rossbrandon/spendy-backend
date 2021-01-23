@@ -1,6 +1,6 @@
+import { Field, ObjectType } from '@nestjs/graphql'
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 import { Document, Types } from 'mongoose'
-import { ObjectType, Field } from '@nestjs/graphql'
 import { Budget } from 'src/budgets/budget.schema'
 
 export type ExpenseDocument = Expense & Document
