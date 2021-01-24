@@ -91,7 +91,10 @@
         }
     },
     "lint-staged": {
-        ".{ts,css,json,md}": [
+        "*.{css,scss,json,md,html}": [
+            "npm run format:fix"
+        ],
+        "*.{ts,tsx}": [
             "npm run format:fix",
             "npm run lint:fix"
         ]

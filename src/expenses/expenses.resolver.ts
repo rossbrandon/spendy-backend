@@ -34,8 +34,14 @@ export class ExpensesResolver {
 
     @Query(() => [Expense])
     @UseGuards(GqlAuthGuard)
-    async expenses(): Promise<Expense[]> {
-        return await this.expensesService.findAll()
+    async expenses(
+        @Args('tag', { nullable: true }) tag: string,
+    ): Promise<Expense[]> {
+        if (tag) {
+            return await this.expensesService.findByTag(tag)
+        } else {
+            return await this.expensesService.findAll()
+        }
     }
 
     @Query(() => [Expense])
@@ -77,6 +83,7 @@ export class ExpensesResolver {
         @Args('reason') reason: string,
         @Args('recurring') recurring: boolean,
         @Args('recurUntil', { nullable: true }) recurUntil: Date,
+        @Args('tags', { type: () => [String], nullable: true }) tags: string[],
         @Args('budget') budget: string,
     ): Promise<Expense> {
         const expenseDto: ExpenseDto = new ExpenseDto()
@@ -86,6 +93,7 @@ export class ExpensesResolver {
         expenseDto.reason = reason
         expenseDto.recurring = recurring
         expenseDto.recurUntil = recurUntil
+        expenseDto.tags = tags
         expenseDto.budget = budget
         return await this.expensesService.create(expenseDto)
     }
@@ -100,6 +108,7 @@ export class ExpensesResolver {
         @Args('reason') reason: string,
         @Args('recurring') recurring: boolean,
         @Args('recurUntil', { nullable: true }) recurUntil: Date,
+        @Args('tags', { type: () => [String], nullable: true }) tags: string[],
         @Args('budget') budget: string,
     ): Promise<Expense> {
         const expenseDto: ExpenseDto = new ExpenseDto()
@@ -109,6 +118,7 @@ export class ExpensesResolver {
         expenseDto.reason = reason
         expenseDto.recurring = recurring
         expenseDto.recurUntil = recurUntil
+        expenseDto.tags = tags
         expenseDto.budget = budget
         return await this.expensesService.update(id, expenseDto)
     }

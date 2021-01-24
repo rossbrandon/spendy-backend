@@ -37,7 +37,11 @@ export class Expense {
 
     @Field({ nullable: true })
     @Prop()
-    recurUntil: Date
+    recurUntil?: Date
+
+    @Field(() => [String], { nullable: true })
+    @Prop()
+    tags?: string[]
 
     @Field()
     @Prop()

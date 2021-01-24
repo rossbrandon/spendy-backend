@@ -31,6 +31,7 @@ type Expense {
   reason: String!
   recurring: Boolean!
   recurUntil: DateTime
+  tags: [String!]
   createdAt: DateTime!
   updatedAt: DateTime!
   budget(populate: Boolean!): Budget!
@@ -48,7 +49,7 @@ type Query {
   budgets: [Budget!]!
   activeBudgets: [Budget!]!
   budget(id: String!): Budget!
-  expenses: [Expense!]!
+  expenses(tag: String): [Expense!]!
   expensesByDateRange(endDate: DateTime!, startDate: DateTime!): [Expense!]!
   expense(id: String!): Expense!
   aggregateSum(endDate: DateTime!, startDate: DateTime!): [Aggregate!]!
@@ -59,7 +60,7 @@ type Mutation {
   createBudget(sortOrder: Float!, showInMenu: Boolean!, endDate: DateTime, startDate: DateTime!, amount: Float!, name: String!): Budget!
   updateBudget(sortOrder: Float!, showInMenu: Boolean!, endDate: DateTime, startDate: DateTime!, amount: Float!, name: String!, id: String!): Budget!
   deleteBudget(id: String!): Budget!
-  createExpense(budget: String!, recurUntil: DateTime, recurring: Boolean!, reason: String!, date: DateTime!, price: Float!, place: String!): Expense!
-  updateExpense(budget: String!, recurUntil: DateTime, recurring: Boolean!, reason: String!, date: DateTime!, price: Float!, place: String!, id: String!): Expense!
+  createExpense(budget: String!, tags: [String!], recurUntil: DateTime, recurring: Boolean!, reason: String!, date: DateTime!, price: Float!, place: String!): Expense!
+  updateExpense(budget: String!, tags: [String!], recurUntil: DateTime, recurring: Boolean!, reason: String!, date: DateTime!, price: Float!, place: String!, id: String!): Expense!
   deleteExpense(id: String!): Expense!
 }

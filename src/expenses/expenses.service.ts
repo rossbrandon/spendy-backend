@@ -17,6 +17,13 @@ export class ExpensesService {
         return this.expenseModel.find({ userEmail: this.getUserEmail() }).exec()
     }
 
+    async findByTag(tag: string): Promise<Expense[]> {
+        return this.expenseModel.find({
+            userEmail: this.getUserEmail(),
+            tags: [tag],
+        })
+    }
+
     async findByDateRange(startDate: Date, endDate: Date): Promise<Expense[]> {
         return this.expenseModel.find({
             userEmail: this.getUserEmail(),
