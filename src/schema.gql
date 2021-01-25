@@ -42,6 +42,7 @@ type Aggregate {
   month: String!
   total: Float!
   place: String!
+  tag: String!
   count: Float!
 }
 
@@ -54,6 +55,7 @@ type Query {
   expense(id: String!): Expense!
   aggregateSum(endDate: DateTime!, startDate: DateTime!): [Aggregate!]!
   aggregatePlaces: [Aggregate!]!
+  aggregateTags: [Aggregate!]!
 }
 
 type Mutation {

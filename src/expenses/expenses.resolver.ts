@@ -74,6 +74,12 @@ export class ExpensesResolver {
         return await this.expensesService.aggregatePlaces()
     }
 
+    @Query(() => [Aggregate])
+    @UseGuards(GqlAuthGuard)
+    async aggregateTags(): Promise<Aggregate[]> {
+        return await this.expensesService.aggregateTags()
+    }
+
     @Mutation(() => Expense)
     @UseGuards(GqlAuthGuard)
     async createExpense(

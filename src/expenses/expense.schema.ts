@@ -76,6 +76,10 @@ export class Aggregate {
 
     @Field()
     @Prop()
+    tag: string
+
+    @Field()
+    @Prop()
     count: number
 }
 

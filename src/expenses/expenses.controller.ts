@@ -44,6 +44,12 @@ export class ExpensesController {
         return await this.expensesService.aggregatePlaces()
     }
 
+    @Get('aggregate/tags')
+    @UseGuards(AuthGuard('jwt'))
+    async aggregateTags(): Promise<Aggregate[]> {
+        return await this.expensesService.aggregateTags()
+    }
+
     @Get(':id')
     @UseGuards(AuthGuard('jwt'))
     async find(@Param('id') id: string): Promise<Expense> {

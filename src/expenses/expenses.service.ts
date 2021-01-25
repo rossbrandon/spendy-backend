@@ -120,6 +120,36 @@ export class ExpensesService {
             .exec()
     }
 
+    async aggregateTags(): Promise<Aggregate[]> {
+        return await this.expenseModel
+            .aggregate([
+                {
+                    $match: {
+                        userEmail: this.getUserEmail(),
+                    },
+                },
+                { $unwind: '$tags' },
+                {
+                    $group: {
+                        _id: {
+                            tags: '$tags',
+                        },
+                        count: { $sum: 1 },
+                    },
+                },
+                { $sort: { count: -1 } },
+                { $limit: 10 },
+                {
+                    $project: {
+                        _id: 0,
+                        tag: '$_id.tags',
+                        count: 1,
+                    },
+                },
+            ])
+            .exec()
+    }
+
     async budgetSum(
         budgetId: string,
         startDate: Date,
